@@ -1,0 +1,6 @@
+@NoSql.Baseline.Api_HostAddress = http://localhost:5237
+
+GET {{NoSql.Baseline.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
