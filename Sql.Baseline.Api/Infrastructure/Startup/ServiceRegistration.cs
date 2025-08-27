@@ -113,16 +113,20 @@ public static class ServiceRegistration
 
         // OpenTelemetry
         services.AddOpenTelemetry()
-            .ConfigureResource(r => r.AddService("Sql.Baseline.Api"))
-            .WithTracing(t => t
-                .AddAspNetCoreInstrumentation()
-                .AddHttpClientInstrumentation()
-                .AddSqlClientInstrumentation(o => o.SetDbStatementForText = true)
-                .AddOtlpExporter())
-            .WithMetrics(m => m
-                .AddAspNetCoreInstrumentation()
-                .AddRuntimeInstrumentation()
-                .AddOtlpExporter());
+                .ConfigureResource(r => r.AddService("Sql.Baseline.Api"))
+                .WithTracing(t => t
+                    .AddAspNetCoreInstrumentation()
+                    .AddHttpClientInstrumentation()
+                    .AddSqlClientInstrumentation(o => o.SetDbStatementForText = true)
+                    .AddOtlpExporter() // keep if you use OTLP
+                )
+                .WithMetrics(m =>
+                {
+                    m.AddAspNetCoreInstrumentation();
+                    m.AddRuntimeInstrumentation();
+                    m.AddPrometheusExporter();   // << REQUIRED for /metrics
+                    // (Optional) m.AddHttpClientInstrumentation(); // if you want client metrics too
+                });
 
         // Health checks
         services.AddAppHealthChecks(cfg);
