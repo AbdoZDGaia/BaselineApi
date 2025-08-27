@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using Microsoft.AspNetCore.Diagnostics;
+using Serilog;
 using Sql.Baseline.Api.Middleware;
 
 namespace Sql.Baseline.Api.Infrastructure.Startup;
@@ -22,7 +23,20 @@ public static class PipelineRegistration
             });
         }
 
-        app.UseExceptionHandler("/error");
+        app.UseExceptionHandler(errorApp =>
+        {
+            errorApp.Run(async context =>
+            {
+                var feature = context.Features.Get<IExceptionHandlerPathFeature>();
+                var ex = feature?.Error;
+                var problem = Results.Problem(
+                    title: "Unhandled exception",
+                    detail: ex?.Message,
+                    statusCode: 500);
+                await problem.ExecuteAsync(context);
+            });
+        });
+
         app.UseHttpsRedirection();
         app.UseCors("default");
         app.UseRateLimiter();

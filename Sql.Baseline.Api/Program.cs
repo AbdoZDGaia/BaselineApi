@@ -13,7 +13,7 @@ builder.Host.UseSerilog();
 builder.Services.AddBaselineServices(builder.Configuration, builder.Environment);
 
 var app = builder.Build();
-
+Log.Information("Baseline API started at {StartedAt}", DateTimeOffset.UtcNow);
 app.UseBaselinePipeline();
 app.MapBaselineModules(builder.Configuration);
 

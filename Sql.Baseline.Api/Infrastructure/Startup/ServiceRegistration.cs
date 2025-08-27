@@ -45,7 +45,17 @@ public static class ServiceRegistration
                 o.Audience = cfg["Jwt:Audience"];
                 o.RequireHttpsMetadata = bool.Parse(cfg["Jwt:RequireHttpsMetadata"] ?? "true");
             });
-        services.AddAuthorization();
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("policy:admin", p =>
+                p.RequireAuthenticatedUser().RequireClaim("role", "admin"));
+
+            options.AddPolicy("policy:report", p =>
+                p.RequireAuthenticatedUser().RequireClaim("role", "report", "admin"));
+
+            options.AddPolicy("can:notify", p =>
+                p.RequireAuthenticatedUser().RequireClaim("permissions", "notify:send"));
+        });
 
         // Versioning + Swagger
         services.AddApiVersioning(o =>
