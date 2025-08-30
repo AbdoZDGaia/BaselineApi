@@ -100,6 +100,7 @@ Sql.Baseline.Api/
 ### Manual Docker Compose Commands
 
 #### Development Environment
+
 ```bash
 # Start development environment with hot reload
 docker-compose -f docker-compose.dev.yml up -d
@@ -112,6 +113,7 @@ docker-compose -f docker-compose.dev.yml down
 ```
 
 #### Production Environment
+
 ```bash
 # Start production environment with monitoring
 docker-compose up -d
@@ -152,6 +154,7 @@ docker-compose down
 ### Environment Configurations
 
 #### Development (`docker-compose.dev.yml`)
+
 - **Purpose**: Local development with hot reload
 - **Services**: API, PostgreSQL, Redis
 - **Features**:
@@ -161,6 +164,7 @@ docker-compose down
   - PostgreSQL for consistent database experience
 
 #### Production (`docker-compose.yml`)
+
 - **Purpose**: Production deployment with full monitoring
 - **Services**: API, PostgreSQL, Redis, Seq, Prometheus, Grafana
 - **Features**:
@@ -171,47 +175,53 @@ docker-compose down
 
 ### Services Overview
 
-| Service | Development | Production | Port | Purpose |
-|---------|-------------|------------|------|---------|
-| API | ✅ | ✅ | 8080 | .NET Web API |
-| PostgreSQL | ✅ | ✅ | 5432 | Database |
-| Redis | ✅ | ✅ | 6379 | Caching |
-| Seq | ❌ | ✅ | 5341 | Log aggregation |
-| Prometheus | ❌ | ✅ | 9090 | Metrics collection |
-| Grafana | ❌ | ✅ | 3000 | Metrics visualization |
+| Service    | Development | Production | Port | Purpose               |
+| ---------- | ----------- | ---------- | ---- | --------------------- |
+| API        | ✅          | ✅         | 8080 | .NET Web API          |
+| PostgreSQL | ✅          | ✅         | 5432 | Database              |
+| Redis      | ✅          | ✅         | 6379 | Caching               |
+| Seq        | ❌          | ✅         | 5341 | Log aggregation       |
+| Prometheus | ❌          | ✅         | 9090 | Metrics collection    |
+| Grafana    | ❌          | ✅         | 3000 | Metrics visualization |
 
 ### Build Script (`build.ps1`)
 
 The project includes a PowerShell build script that automates Docker Compose operations:
 
 #### Features:
+
 - **Automated Environment Setup** - One-command deployment
 - **Build Optimization** - Enables Docker BuildKit for faster builds
 - **Environment Management** - Clean, rebuild, and manage containers
 - **User-Friendly Interface** - Colored output and helpful commands
 
 #### Script Modes:
+
 - `dev` - Build and start development environment
 - `prod` - Build and start production environment
 - `clean` - Clean all containers, images, and volumes
 - `rebuild` - Clean everything and rebuild production
 
 #### Options:
+
 - `-NoCache` - Force rebuild without using cache
 - `-Parallel` - Build services in parallel for speed
 
 ### Development Workflow
 
 1. **Start Development Environment**:
+
    ```bash
    docker-compose -f docker-compose.dev.yml up -d
    ```
 
 2. **Make Code Changes**:
+
    - Edit files in `./Sql.Baseline.Api/`
    - Changes are automatically detected and reloaded
 
 3. **View Logs**:
+
    ```bash
    docker-compose -f docker-compose.dev.yml logs -f api
    ```
@@ -224,17 +234,20 @@ The project includes a PowerShell build script that automates Docker Compose ope
 ### Production Deployment
 
 1. **Start Production Environment**:
+
    ```bash
    docker-compose up -d
    ```
 
 2. **Monitor Services**:
+
    ```bash
    docker-compose ps
    docker-compose logs -f
    ```
 
 3. **Access Monitoring**:
+
    - Grafana: `http://localhost:3000` (admin/admin)
    - Prometheus: `http://localhost:9090`
    - Seq: `http://localhost:5341`
@@ -249,14 +262,17 @@ The project includes a PowerShell build script that automates Docker Compose ope
 #### Common Issues
 
 1. **Port Conflicts**:
+
    - Ensure ports 8080, 5432, 6379 are available
    - Production also uses 3000, 5341, 9090
 
 2. **Database Connection Issues**:
+
    - Wait for PostgreSQL health check to pass
    - Check connection string format
 
 3. **API Not Starting**:
+
    - Check logs: `docker-compose logs api`
    - Ensure all dependencies are healthy
 
