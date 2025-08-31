@@ -30,12 +30,12 @@ public static class ServiceRegistration
         services.AddSingleton<SaveChangesInterceptor, EfAuditSaveChangesInterceptor>();
         services.AddDbContext<BaselineDbContext>((sp, opt) =>
         {
-            opt.UseSqlServer(cfg.GetConnectionString("Default"))
+            opt.UseNpgsql(cfg.GetConnectionString("Default"))
                .AddInterceptors(sp.GetRequiredService<SaveChangesInterceptor>());
         });
 
         // Dapper connection factory
-        services.AddScoped<IDbConnectionFactory>(_ => new SqlConnectionFactory(cfg.GetConnectionString("Default")!));
+        services.AddScoped<IDbConnectionFactory>(_ => new NpgsqlConnectionFactory(cfg.GetConnectionString("Default")!));
 
         // AuthN/Z
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -117,7 +117,6 @@ public static class ServiceRegistration
                 .WithTracing(t => t
                     .AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation()
-                    .AddSqlClientInstrumentation(o => o.SetDbStatementForText = true)
                     .AddOtlpExporter() // keep if you use OTLP
                 )
                 .WithMetrics(m =>
