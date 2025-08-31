@@ -83,6 +83,7 @@ Sql.Baseline.Api/
 
 ### Using Build Script (Recommended)
 
+#### Windows (PowerShell)
 ```powershell
 # Start development environment
 .\build.ps1
@@ -95,6 +96,21 @@ Sql.Baseline.Api/
 
 # Rebuild production without cache
 .\build.ps1 -Mode rebuild -NoCache
+```
+
+#### Linux/macOS (Bash)
+```bash
+# Start development environment
+./build.sh
+
+# Start production environment
+./build.sh -m prod
+
+# Clean everything
+./build.sh -m clean
+
+# Rebuild production without cache
+./build.sh -m rebuild -n
 ```
 
 ### Manual Docker Compose Commands
@@ -184,9 +200,11 @@ docker-compose down
 | Prometheus | ❌          | ✅         | 9090 | Metrics collection    |
 | Grafana    | ❌          | ✅         | 3000 | Metrics visualization |
 
-### Build Script (`build.ps1`)
+### Build Scripts
 
-The project includes a PowerShell build script that automates Docker Compose operations:
+The project includes build scripts that automate Docker Compose operations:
+
+#### PowerShell Script (`build.ps1`) - Windows
 
 #### Features:
 
@@ -206,6 +224,30 @@ The project includes a PowerShell build script that automates Docker Compose ope
 
 - `-NoCache` - Force rebuild without using cache
 - `-Parallel` - Build services in parallel for speed
+
+#### Bash Script (`build.sh`) - Linux/macOS
+
+The project also includes a bash script with the same functionality for Linux and macOS systems.
+
+#### Features:
+
+- **Cross-platform compatibility** - Works on Linux and macOS
+- **Automated Environment Setup** - One-command deployment
+- **Build Optimization** - Enables Docker BuildKit for faster builds
+- **Environment Management** - Clean, rebuild, and manage containers
+- **User-Friendly Interface** - Colored output and helpful commands
+
+#### Script Modes:
+
+- `dev` - Build and start development environment
+- `prod` - Build and start production environment
+- `clean` - Clean all containers, images, and volumes
+- `rebuild` - Clean everything and rebuild production
+
+#### Options:
+
+- `-n, --no-cache` - Force rebuild without using cache
+- `-p, --parallel` - Build services in parallel for speed
 
 ### Development Workflow
 
